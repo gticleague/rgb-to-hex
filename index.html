@@ -1,228 +1,90 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>RGB (0–9) → HEX Converter</title>
-<style>
-  :root{
-    --bg:#0b0049;
-    --accent:#00aaff;
-    --panel:#111;
-    --text:#efefef;
-  }
-  body{
-    background:var(--bg);
-    color:var(--text);
-    font-family:system-ui,Segoe UI,Roboto,Arial;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    min-height:100vh;
-    padding:24px;
-    margin:0;
-  }
-
-  .card{
-    width:100%;
-    max-width:720px;
-    background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(0,0,0,0.12));
-    border-radius:12px;
-    padding:20px;
-    box-shadow:0 8px 30px rgba(0,0,0,0.6);
-  }
-
-  h1{ margin:0 0 14px; font-size:20px; text-align:center; color:var(--text) }
-
-  .preview-row{
-    display:flex; gap:20px; align-items:center; justify-content:center; flex-wrap:wrap;
-    margin-bottom:18px;
-  }
-
-  #preview {
-    width:160px; height:160px; border-radius:10px;
-    border:4px solid rgba(255,255,255,0.12); box-shadow:0 6px 18px rgba(0,0,0,0.5);
-  }
-
-  .outputs {
-    display:flex; flex-direction:column; gap:8px; align-items:flex-start;
-  }
-  .outputs .out {
-    background:var(--panel);
-    padding:10px 12px; border-radius:8px;
-    min-width:200px; text-align:left;
-    box-shadow: inset 0 -1px 0 rgba(255,255,255,0.02);
-  }
-  .out b{ display:block; font-size:12px; color:#ddd; margin-bottom:6px; }
-  .hex-value { font-family:monospace; font-size:18px; }
-
-  .sliders { display:flex; flex-direction:column; gap:14px; margin-top:8px; align-items:center; }
-  .slider-row { display:flex; gap:12px; align-items:center; width:100%; max-width:640px; justify-content:space-between; }
-  .slider-row label { width:60px; text-align:right; margin-right:8px; color:#ddd; }
-  .slider-row .controls { flex:1; display:flex; gap:12px; align-items:center; }
-  input[type=range] { -webkit-appearance:none; height:8px; border-radius:6px; background:linear-gradient(to right,var(--accent) 0%, var(--accent) 0%, #444 0%, #444 100%); outline:none; }
-  input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:18px; height:18px; border-radius:4px; background:var(--accent); box-shadow:0 0 6px rgba(0,170,255,0.6); margin-top:-5px; border:none; }
-  .val-box { width:80px; text-align:left; font-family:monospace; color:#fff; }
-
-  .row { display:flex; gap:12px; align-items:center; justify-content:center; flex-wrap:wrap; margin-top:12px; }
-
-  button.copy {
-    background:var(--accent); color:#001; border:none; padding:8px 12px; border-radius:8px; cursor:pointer; font-weight:700;
-    box-shadow:0 6px 14px rgba(0,170,255,0.12);
-  }
-  button.copy:active{ transform:translateY(1px) }
-
-  .note { font-size:13px; color:#cfcfcf; text-align:center; margin-top:12px; }
-
-  @media (max-width:520px){
-    .preview-row{ flex-direction:column-reverse; }
-    .outputs .out{ min-width:160px; width:100%; text-align:center }
-    .slider-row{ flex-direction:column; align-items:stretch }
-    .slider-row label{ text-align:left; width:auto }
-    .val-box{ width:auto }
-  }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RGB (0-9) to HEX Converter</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1e1e1e;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+        .slider-container {
+            margin: 20px 0;
+        }
+        input[type="range"] {
+            width: 200px;
+        }
+        .color-preview {
+            width: 100px;
+            height: 100px;
+            margin: 20px auto;
+            border-radius: 10px;
+            border: 2px solid white;
+        }
+    </style>
 </head>
 <body>
-  <div class="card">
-    <h1>RGB (0–9) → HEX Converter</h1>
+    <h1>RGB (0-9) to HEX Converter</h1>
 
-    <div class="preview-row">
-      <div id="preview" aria-hidden="true"></div>
-
-      <div class="outputs">
-        <div class="out">
-          <b>Scaled RGB (0–255)</b>
-          <div id="scaledRGB" class="hex-value">RGB(0, 0, 0)</div>
-        </div>
-
-        <div class="out">
-          <b>HEX</b>
-          <div id="hexVal" class="hex-value">#000000</div>
-        </div>
-      </div>
+    <div class="slider-container">
+        <label>Red: <span id="redValue">0</span></label><br>
+        <input type="range" id="red" min="0" max="9" value="0">
     </div>
 
-    <div class="sliders">
-      <div class="slider-row">
-        <label for="r">R</label>
-        <div class="controls">
-          <input type="range" id="r" min="0" max="9" value="0" />
-          <div class="val-box">0 &nbsp;|&nbsp; <span id="r255">0</span></div>
-        </div>
-      </div>
-
-      <div class="slider-row">
-        <label for="g">G</label>
-        <div class="controls">
-          <input type="range" id="g" min="0" max="9" value="0" />
-          <div class="val-box">0 &nbsp;|&nbsp; <span id="g255">0</span></div>
-        </div>
-      </div>
-
-      <div class="slider-row">
-        <label for="b">B</label>
-        <div class="controls">
-          <input type="range" id="b" min="0" max="9" value="0" />
-          <div class="val-box">0 &nbsp;|&nbsp; <span id="b255">0</span></div>
-        </div>
-      </div>
+    <div class="slider-container">
+        <label>Green: <span id="greenValue">0</span></label><br>
+        <input type="range" id="green" min="0" max="9" value="0">
     </div>
 
-    <div class="row">
-      <button class="copy" id="copyHex">Copy HEX</button>
+    <div class="slider-container">
+        <label>Blue: <span id="blueValue">0</span></label><br>
+        <input type="range" id="blue" min="0" max="9" value="0">
     </div>
 
-    <div class="note">Sliders use a 0–9 scale; values are scaled to 0–255 for HEX conversion.</div>
-  </div>
+    <h2>HEX: <span id="hexValue">#000000</span></h2>
+    <div class="color-preview" id="colorPreview"></div>
 
-<script>
-  // Elements
-  const r = document.getElementById('r');
-  const g = document.getElementById('g');
-  const b = document.getElementById('b');
-  const r255 = document.getElementById('r255');
-  const g255 = document.getElementById('g255');
-  const b255 = document.getElementById('b255');
-  const hexVal = document.getElementById('hexVal');
-  const scaledRGB = document.getElementById('scaledRGB');
-  const preview = document.getElementById('preview');
-  const copyBtn = document.getElementById('copyHex');
+    <script>
+        const redSlider = document.getElementById('red');
+        const greenSlider = document.getElementById('green');
+        const blueSlider = document.getElementById('blue');
 
-  // scale 0-9 -> 0-255
-  function scaleTo255(v){
-    // v is integer 0..9
-    return Math.round((v / 9) * 255);
-  }
+        const redValue = document.getElementById('redValue');
+        const greenValue = document.getElementById('greenValue');
+        const blueValue = document.getElementById('blueValue');
 
-  function toHexByte(n){
-    // n is 0..255
-    const hex = n.toString(16).toUpperCase();
-    return hex.length === 1 ? '0' + hex : hex;
-  }
+        const hexValue = document.getElementById('hexValue');
+        const colorPreview = document.getElementById('colorPreview');
 
-  function updateAll(){
-    const rv = parseInt(r.value,10);
-    const gv = parseInt(g.value,10);
-    const bv = parseInt(b.value,10);
+        function updateColor() {
+            let r = parseInt(redSlider.value);
+            let g = parseInt(greenSlider.value);
+            let b = parseInt(blueSlider.value);
 
-    const r_s = scaleTo255(rv);
-    const g_s = scaleTo255(gv);
-    const b_s = scaleTo255(bv);
+            // Display slider numbers
+            redValue.textContent = r;
+            greenValue.textContent = g;
+            blueValue.textContent = b;
 
-    // update numeric displays
-    r255.textContent = r_s;
-    g255.textContent = g_s;
-    b255.textContent = b_s;
+            // Convert 0-9 to HEX digits
+            let rHex = r.toString(16);
+            let gHex = g.toString(16);
+            let bHex = b.toString(16);
 
-    scaledRGB.textContent = `RGB(${r_s}, ${g_s}, ${b_s})`;
+            let hex = `#${rHex}${gHex}${bHex}`;
+            hexValue.textContent = hex;
+            colorPreview.style.backgroundColor = hex;
+        }
 
-    // build hex
-    const hex = '#' + toHexByte(r_s) + toHexByte(g_s) + toHexByte(b_s);
-    hexVal.textContent = hex;
+        redSlider.addEventListener('input', updateColor);
+        greenSlider.addEventListener('input', updateColor);
+        blueSlider.addEventListener('input', updateColor);
 
-    // preview
-    preview.style.backgroundColor = `rgb(${r_s}, ${g_s}, ${b_s})`;
-
-    // update slider fill visuals (blue fill up to value)
-    updateSliderFill(r);
-    updateSliderFill(g);
-    updateSliderFill(b);
-  }
-
-  function updateSliderFill(slider){
-    const min = Number(slider.min);
-    const max = Number(slider.max);
-    const val = Number(slider.value);
-    const percent = ((val - min) / (max - min)) * 100;
-    slider.style.background = `linear-gradient(to right, var(--accent) 0%, var(--accent) ${percent}%, #444 ${percent}%, #444 100%)`;
-  }
-
-  // copy to clipboard
-  copyBtn.addEventListener('click', async () => {
-    const text = hexVal.textContent.trim();
-    try {
-      await navigator.clipboard.writeText(text);
-      copyBtn.textContent = 'Copied!';
-      setTimeout(()=> copyBtn.textContent = 'Copy HEX', 1200);
-    } catch(e) {
-      // fallback
-      const ta = document.createElement('textarea');
-      ta.value = text;
-      document.body.appendChild(ta);
-      ta.select();
-      document.execCommand('copy');
-      ta.remove();
-      copyBtn.textContent = 'Copied!';
-      setTimeout(()=> copyBtn.textContent = 'Copy HEX', 1200);
-    }
-  });
-
-  // wire up events
-  [r,g,b].forEach(s => s.addEventListener('input', updateAll));
-
-  // init
-  updateAll();
-</script>
+        updateColor(); // Initial update
+    </script>
 </body>
 </html>
