@@ -16,6 +16,7 @@
     color:var(--text);
     font-family:system-ui,Segoe UI,Roboto,Arial;
     display:flex;
+    flex-direction: column;
     align-items:center;
     justify-content:center;
     min-height:100vh;
@@ -74,12 +75,40 @@
 
   .note { font-size:13px; color:#cfcfcf; text-align:center; margin-top:12px; }
 
+  .footer {
+    margin-top:20px;
+    color: var(--text);
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    user-select: none;
+  }
+  .footer a {
+    color: var(--accent);
+    text-decoration: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .footer a:hover {
+    text-decoration: underline;
+  }
+  .footer img {
+    height: 28px;
+    width: 28px;
+    border-radius: 4px;
+    object-fit: contain;
+  }
+
   @media (max-width:520px){
     .preview-row{ flex-direction:column-reverse; }
     .outputs .out{ min-width:160px; width:100%; text-align:center }
     .slider-row{ flex-direction:column; align-items:stretch }
     .slider-row label{ text-align:left; width:auto }
     .val-box{ width:auto }
+    .footer { justify-content: center; }
   }
 </style>
 </head>
@@ -136,8 +165,19 @@
     <div class="note">Sliders use a 0–9 scale; values are scaled to 0–255 for HEX conversion.</div>
   </div>
 
+  <footer class="footer" aria-label="credits">
+    <a href="https://discord.com/users/1252981295454224390" target="_blank" rel="noopener noreferrer" title="Made by katislunatic">
+      Made by <strong style="margin-left:6px;">katislunatic</strong>
+    </a>
+
+    <a href="https://discord.gg/hB4V4ywqxj" target="_blank" rel="noopener noreferrer" title="GTIC Discord Server">
+      <img
+        src="https://cdn.discordapp.com/attachments/1300121957576212565/1403146509729398835/GTIC_Logo2.png?ex=68992085&is=6897cf05&hm=22a820e07de3e99c3b7b7ff280de00b8f05ab5a9fb373fee282b78b0d5e9a8a6&"
+        alt="GTIC Logo" />
+    </a>
+  </footer>
+
 <script>
-  // Elements
   const r = document.getElementById('r');
   const g = document.getElementById('g');
   const b = document.getElementById('b');
@@ -152,7 +192,6 @@
   const preview = document.getElementById('preview');
   const copyBtn = document.getElementById('copyHex');
 
-  // scale 0-9 -> 0-255
   function scaleTo255(v){
     return Math.round((v / 9) * 255);
   }
@@ -167,7 +206,6 @@
     const gv = parseInt(g.value,10);
     const bv = parseInt(b.value,10);
 
-    // update 0-9 display
     r9.textContent = rv;
     g9.textContent = gv;
     b9.textContent = bv;
