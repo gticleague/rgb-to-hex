@@ -1,79 +1,89 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>0-9 RGB to HEX Converter</title>
-<style>
-    body {
-        font-family: Arial, sans-serif;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        margin-top: 30px;
-        background-color: #f0f0f0;
-    }
-    .slider-container {
-        margin: 10px;
-    }
-    input[type="range"] {
-        width: 200px;
-    }
-    .output {
-        margin-top: 20px;
-        padding: 10px;
-        border: 1px solid #ccc;
-        background-color: white;
-        font-weight: bold;
-    }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>0–9 RGB to HEX Converter</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        .color-box {
+            width: 150px;
+            height: 150px;
+            margin: 20px auto;
+            border: 1px solid #ccc;
+            background-color: #000;
+        }
+        .slider-container {
+            margin: 10px 0;
+        }
+        .slider-container label {
+            display: block;
+            margin-bottom: 5px;
+        }
+    </style>
 </head>
 <body>
+    <h1>0–9 RGB to HEX Converter</h1>
+    <div class="color-box" id="colorBox"></div>
 
-<h2>RGB (0-9) to HEX Converter</h2>
+    <div class="slider-container">
+        <label>R: <span id="rValue">0</span></label>
+        <input type="range" min="0" max="9" value="0" id="rSlider">
+    </div>
 
-<div class="slider-container">
-    <label>Red: <span id="redValue">0</span></label><br>
-    <input type="range" id="red" min="0" max="9" step="1" value="0">
-</div>
+    <div class="slider-container">
+        <label>G: <span id="gValue">0</span></label>
+        <input type="range" min="0" max="9" value="0" id="gSlider">
+    </div>
 
-<div class="slider-container">
-    <label>Green: <span id="greenValue">0</span></label><br>
-    <input type="range" id="green" min="0" max="9" step="1" value="0">
-</div>
+    <div class="slider-container">
+        <label>B: <span id="bValue">0</span></label>
+        <input type="range" min="0" max="9" value="0" id="bSlider">
+    </div>
 
-<div class="slider-container">
-    <label>Blue: <span id="blueValue">0</span></label><br>
-    <input type="range" id="blue" min="0" max="9" step="1" value="0">
-</div>
+    <h2>HEX Code: <span id="hexCode">#000</span></h2>
 
-<div class="output" id="hexOutput">HEX: #000</div>
+    <script>
+        const rSlider = document.getElementById('rSlider');
+        const gSlider = document.getElementById('gSlider');
+        const bSlider = document.getElementById('bSlider');
 
-<script>
-function updateColor() {
-    let r = parseInt(document.getElementById('red').value);
-    let g = parseInt(document.getElementById('green').value);
-    let b = parseInt(document.getElementById('blue').value);
+        const rValue = document.getElementById('rValue');
+        const gValue = document.getElementById('gValue');
+        const bValue = document.getElementById('bValue');
 
-    document.getElementById('redValue').innerText = r;
-    document.getElementById('greenValue').innerText = g;
-    document.getElementById('blueValue').innerText = b;
+        const colorBox = document.getElementById('colorBox');
+        const hexCode = document.getElementById('hexCode');
 
-    // Convert 0-9 values to HEX digits
-    let hexR = r.toString(16);
-    let hexG = g.toString(16);
-    let hexB = b.toString(16);
+        function updateColor() {
+            const r = parseInt(rSlider.value);
+            const g = parseInt(gSlider.value);
+            const b = parseInt(bSlider.value);
 
-    let hexColor = `#${hexR}${hexG}${hexB}`;
-    document.getElementById('hexOutput').innerText = `HEX: ${hexColor}`;
-}
+            // Display slider values
+            rValue.textContent = r;
+            gValue.textContent = g;
+            bValue.textContent = b;
 
-document.querySelectorAll('input[type="range"]').forEach(slider => {
-    slider.addEventListener('input', updateColor);
-});
+            // Convert to hex (single digit each since 0–9)
+            const hex = `#${r}${g}${b}`;
 
-updateColor();
-</script>
+            // Update UI
+            hexCode.textContent = hex;
+            colorBox.style.backgroundColor = hex;
+        }
 
+        rSlider.addEventListener('input', updateColor);
+        gSlider.addEventListener('input', updateColor);
+        bSlider.addEventListener('input', updateColor);
+
+        updateColor();
+    </script>
 </body>
 </html>
